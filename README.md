@@ -26,7 +26,7 @@ los lunes 11:00-12:00 y martes 10:00-12:00.
     - [markdown](https://confluence.atlassian.com/display/STASH/Markdown+syntax+guide)
     - [git](https://www.atlassian.com/git/tutorials/); y,
     - [lenguaje Julia](http://julialang.org).
-    
+
 
 1. Diferenciación automática/algorítmica: derivadas de primer orden.
 
@@ -67,3 +67,23 @@ de cada uno de los integrantes del equipo será medida usando GitHub.
 - **Guía de sintaxis en markdown**
 
 	- [Markdown syntax guide](https://confluence.atlassian.com/display/STASH/Markdown+syntax+guide)
+
+
+- **Tutoriales de git**
+
+    - [Learn Git branching](http://pcottle.github.io/learnGitBranching)
+
+	- [Become a Git guru](https://www.atlassian.com/git/tutorials/)
+
+	- [Hello World en GitHub](https://guides.github.com/activities/hello-world/)
+
+	- [Sincronizar un fork](https://help.github.com/articles/syncing-a-fork/)
+
+- **Julia**
+	- [http://julialang.org/](julialang.org)
+
+	- [Tutorial de David Sanders (scipy2014)](https://github.com/dpsanders/scipy_2014_julia/blob/master/Introduction%20to%20Julia.ipynb)
+
+	- [Hands_on_julia](https://github.com/dpsanders/hands_on_julia)
+
+	- [JuliaBox](juliabox.org)
