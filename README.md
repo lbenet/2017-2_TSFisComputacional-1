@@ -1,14 +1,14 @@
-# 2016-2 Temas Selectos de Física Computacional (8355)
+# 2017-2 Temas Selectos de Física Computacional (8355)
 
 ### Luis Benet, [Instituto de Ciencias Físicas](http://www.fis.unam.mx/benet), UNAM
 ### Uriel Allan Aceves Rodríguez, Facultad de Ciencias, UNAM
 
-Nuestros datos de contacto (email) están en la [página](http://www.fciencias.unam.mx/docencia/horarios/presentacion/269493) de presentación del curso.)
+Nuestros datos de contacto (email) están en la [página](http://www.fciencias.unam.mx/docencia/horarios/presentacion/280981) de presentación del curso.)
 
 
 -----
 
-![Computing slow manifolds](https://wikis.bris.ac.uk/download/attachments/21725268/dko_fn_a03.gif)
+<img src="https://wikis.bris.ac.uk/download/attachments/21725268/dko_fn_a03.gif" title="Computing slow manifolds" width="250" height="200" align="center">
 
 ---
 
