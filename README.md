@@ -82,7 +82,7 @@ de cada uno de los integrantes del equipo será medida usando GitHub.
 - **Julia**
 	- [http://julialang.org/](julialang.org)
 
-	- [Tutorial de David Sanders (scipy2014)](https://github.com/dpsanders/scipy_2014_julia/blob/master/Introduction%20to%20Julia.ipynb)
+	- [Tutorial de David Sanders (scipy2014)](https://github.com/dpsanders/scipy_2014_julia)
 
 	- [Hands_on_julia](https://github.com/dpsanders/hands_on_julia)
 
