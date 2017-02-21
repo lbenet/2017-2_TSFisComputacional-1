@@ -14,5 +14,4 @@
 |     Asignación     | Fecha límite Pull Request | Fecha límite de aceptación  |         Estado         |
 |:------------------:|:------------------------:|:-----------------------:|:----------------------:|
 |        Tarea 0     | Domingo 12 de febrero   |  Domingo 19 de febrero | Se acepta *PR* / Revisión  |
-
-
+|        Tarea 1     | Domingo 26 de febrero   |  Domingo 12 de marzo | Se acepta *PR* |
