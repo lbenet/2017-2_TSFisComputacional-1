@@ -41,11 +41,25 @@ end
 
 
 +(a::Dual, b::Dual) = Dual(a.fun+b.fun, a.der+b.der)
++(a::Dual, b::Real) = Dual(a.fun+b,a.der)
++(a::Real, b::Dual) = Dual(a+b.fun,b.der)
+
 -(a::Dual, b::Dual) = Dual(a.fun-b.fun, a.der-b.der)
+-(a::Dual, b::Real) = Dual(a.fun-b,a.der)
+-(a::Real, b::Dual) = Dual(a-b.fun,-b.der)
+
 *(a::Dual, b::Dual) = Dual(a.fun*b.fun, a.fun*b.der+b.fun*a.der)
+*(a::Dual, b::Real) = Dual(b*a.fun,b*a.der)
+*(a::Real, b::Dual) = Dual(a*b.fun,a*b.der)
+
 /(a::Dual, b::Dual) = Dual(a.fun/b.fun, a.der-(a.fun/b.fun)*b.der/b.fun)
-^(a::Dual, alfa::Real) = Dual(a.fun^alfa, alfa*a.fun^(alfa-1)*a.der)
-==(a::Dual, b::Dual) = Bool(a.fun==b.fun && a.der==b.der)
+/(a::Dual, b::Real) = Dual( a.fun/b, a.der/b)
+
+^(a::Dual, b::Int64) = Dual(a.fun^b,b*a.fun^(b-1)*a.der)
+
+==(a::Dual, b::Dual) = a.fun==b.fun && a.der==b.der
+==(a::Dual, b::Real) = a==b.fun && 0.0==b.der
+==(a::Real, b::Dual) = a.fun==b && a.der==0.0
 
 end
 
