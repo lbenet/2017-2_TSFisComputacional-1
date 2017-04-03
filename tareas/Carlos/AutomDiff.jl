@@ -9,8 +9,7 @@ module AD
     # Aquí viene TODO el código que implementaron.
     # Primero uno incluye la definición de Dual y
     # después las operaciones con Duales.
-    ...
-
+   
 #=
     Dual{T<:Real}
 
