@@ -6,6 +6,7 @@ using AD
 # ser suficientemente exhaustivos
 
 #test de problema1
+@testset "pruebas realizadas"  begin
 a=Dual(1,2.0)
 @test a.fun==1
 @test a.der==2
@@ -18,9 +19,11 @@ b=Dual(3)
 c=xdual(10)
 @test c.fun==10
 @test c.der==1
+end
 
 
 #test de problema2
+@testset "pruebas realizadas"  begin
  alfa=Dual(5,2)+Dual(5,2)
 @test alfa.fun==10
 @test alfa.der==4
@@ -65,3 +68,5 @@ epsilon=Dual(2)^4
 @test Dual(12,2)==Dual(12,2)
 @test Dual(12)==Dual(12,0)
 @test Dual(12,0)==Dual(12)
+    
+end
