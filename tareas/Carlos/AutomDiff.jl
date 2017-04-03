@@ -20,26 +20,25 @@ type Dual{T<:Real}
     der::T
 end
 
-#=
+"""
 promoviendo los duales del tipo distinto
-=#
+"""
 function Dual(fun,der)
  return Dual(promote(fun,der)...)
 end
 
-#= 
-Aquí se define un método que garantiza que el dual de una constante 
-(número) cumple lo requerido
-=#
+"""
+garantizando de que la derivada de una funcion constante es igual a cero
+"""
 function Dual(a::Real)
     return Dual(a,0.0)
 end
 
-#= 
+"""
 Aquí se define la función `xdual`, que se usará para identificar 
 la variable independiente. La función dependerá de x_0, y debe 
 regresar el Dual apropiado a la variable independiente
-=#
+"""
 
 function xdual(x0)
     return Dual(x0,1)
