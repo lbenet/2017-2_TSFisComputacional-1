@@ -103,3 +103,9 @@ pot1 = a^w
 
 @test pot1.fun == x^w
 @test pot1.der == w * y * x ^(w-1)
+
+# Test de comparación
+
+@test a == Dual(x, y)
+@test b == Dual(z, 0)
+@test c == Dual(x, 1)
