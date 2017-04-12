@@ -58,6 +58,7 @@ end
 
 /(A::Dual,B::Dual)=Dual((A.fun)/(B.fun),((A.fun*B.der)-(A.der*B.fun))/(B.fun)^2)
 /(A::Dual,epsilon::Real)=Dual(A.fun/epsilon,A.der/epsilon)
+/(epsilon::Real,B::Dual)=Dual(epsilon/B.fun,(-epsilon*B.der)/((B.fun)^2))   #agregado necesario para la tarea4
 
 ^(A::Dual,beta::Int64)=Dual((A.fun)^(beta),beta*((A.fun)^(beta-1))*(A.der))
 
