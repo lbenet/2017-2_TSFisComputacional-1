@@ -13,7 +13,7 @@ __precompile__(true)
 module AD
     import Base: +, -, *, /, ^, ==
 
-    export Dual, xdual
+    export Dual, xdual, der, fun
 
 
     doc"""
@@ -62,6 +62,15 @@ module AD
 
     function xdual(x0)
             return Dual(x0,1)
+    end
+
+
+    function fun(a::Dual)
+        return a.fun
+    end
+
+    function der(a::Dual)
+        return a.der
     end
 
     # Se definen las operaciones con duales.
