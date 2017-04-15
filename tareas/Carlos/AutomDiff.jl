@@ -66,4 +66,37 @@ end
 ==(A::Dual,zeta::Real)=(A==zeta.fun && 0.0==zeta.der)
 ==(zeta::Real,B::Dual)=(zeta.fun==B.fun && zeta.der==0.0)
 
+
+
+#agregado para la tarea 4
+import Base:sin,cos,tan,cot,sec,csc,sinh,cosh,tanh,coth,sech,csch,asin,acos,atan,acot,asec,acsc,exp,log,sqrt
+#como en la tarea pasada, se harán tuplas, la primera entrada del dual es la función, mientras que la segunda entraa es su dervidad.
+for (f,df)=((:sin,(:(cos(a.fun)))),
+    (:cos,(:(-sin(a.fun)))),
+    (:tan,(:(sec(a.fun)^2))),
+    (:cot,(:(-csc(a.fun)^2))),
+    (:sec,(:(sec(a.fun)*tan(a.fun)))),
+    (:csc,(:(-csc(a.fun)*cot(a.fun)))),
+    (:sinh,(:(cosh(a.fun)))),
+    (:cosh,(:(sinh(a.fun)))),
+    (:tanh,(:(sech(a.fun)^2))),
+    (:coth,(:(-csch(a.fun)^2))),
+    (:sech,(:(-sech(a.fun)*tanh(a.fun)))),
+    (:csch,(:(-coth(a.fun)*csch(a.fun)))),
+    (:asin,(:(1/sqrt(1-(a.fun)^2)))),
+    (:acos,(:(-1/sqrt(1-(a.fun)^2)))),
+    (:atan,(:(1/(1+(a.fun)^2)))),
+    (:acot,(:(-1/(1+(a.fun)^2)))),
+    (:asec,(:(1/((a.fun)*sqrt(((a.fun)^2)-1))))),
+    (:acsc,(:(-1/((a.fun)*sqrt(((a.fun)^2)-1))))),
+    (:exp,(:(exp(a.fun)))),
+    (:log,(:(1/(a.fun)))),
+    (:sqrt,(:(1/(2*sqrt(a.fun))))))
+    ex=quote
+        $f(a::Dual)=Dual($f(a.fun),$df*a.der)
+    end
+    println(ex)
+    @eval $ex
+end
+
 end
