@@ -71,32 +71,26 @@ end
 #agregado para la tarea 4
 import Base:sin,cos,tan,cot,sec,csc,sinh,cosh,tanh,coth,sech,csch,asin,acos,atan,acot,asec,acsc,exp,log,sqrt
 #como en la tarea pasada, se harán tuplas, la primera entrada del dual es la función, mientras que la segunda entraa es su dervidad.
-for (f,df)=((:sin,(:(cos(a.fun)))),
-    (:cos,(:(-sin(a.fun)))),
-    (:tan,(:(sec(a.fun)^2))),
-    (:cot,(:(-csc(a.fun)^2))),
-    (:sec,(:(sec(a.fun)*tan(a.fun)))),
-    (:csc,(:(-csc(a.fun)*cot(a.fun)))),
-    (:sinh,(:(cosh(a.fun)))),
-    (:cosh,(:(sinh(a.fun)))),
-    (:tanh,(:(sech(a.fun)^2))),
-    (:coth,(:(-csch(a.fun)^2))),
-    (:sech,(:(-sech(a.fun)*tanh(a.fun)))),
-    (:csch,(:(-coth(a.fun)*csch(a.fun)))),
-    (:asin,(:(1/sqrt(1-(a.fun)^2)))),
-    (:acos,(:(-1/sqrt(1-(a.fun)^2)))),
-    (:atan,(:(1/(1+(a.fun)^2)))),
-    (:acot,(:(-1/(1+(a.fun)^2)))),
-    (:asec,(:(1/((a.fun)*sqrt(((a.fun)^2)-1))))),
-    (:acsc,(:(-1/((a.fun)*sqrt(((a.fun)^2)-1))))),
-    (:exp,(:(exp(a.fun)))),
-    (:log,(:(1/(a.fun)))),
-    (:sqrt,(:(1/(2*sqrt(a.fun))))))
-    ex=quote
-        $f(a::Dual)=Dual($f(a.fun),$df*a.der)
-    end
-    println(ex)
-    @eval $ex
-end
-
+sin(A::Dual)=Dual(sin(A.fun),cos(A.fun)*A.der)
+cos(A::Dual)=Dual(cos(A.fun),-sin(A.fun)*A.der)
+tan(A::Dual)=Dual(tan(A.fun),(sec(A.fun)^2)*A.der)
+cot(A::Dual)=Dual(cot(A.fun),(-csc(A.fun)^2)*A.der)
+sec(A::Dual)=Dual(sec(A.fun),(sec(A.fun)*tan(A.fun))*A.der)
+csc(A::Dual)=Dual(csc(A.fun),(-csc(A.fun)*cot(A.fun))*A.der)
+sinh(A::Dual)=Dual(sinh(A.fun),cosh(A.fun)*A.der)
+cosh(A::Dual)=Dual(cosh(A.fun),sinh(A.fun)*A.der)
+tanh(A::Dual)=Dual(tanh(A.fun),(sech(A.fun)^2)*A.der)
+coth(A::Dual)=Dual(coth(A.fun),(-csch(A.fun)^2)*A.der)
+sech(A::Dual)=Dual(sech(A.fun),(-sech(A.fun)*tanh(A.fun))*A.der)
+csch(A::Dual)=Dual(csch(A.fun),(-coth(A.fun)*csch(A.fun))*A.der)
+asin(A::Dual)=Dual(asin(A.fun),(1/sqrt(1-(A.fun)^2))*A.der)
+acos(A::Dual)=Dual(acos(A.fun),(-1/sqrt(1-(A.fun)^2))*A.der)
+atan(A::Dual)=Dual(atan(A.fun),(1/(1+(A.fun)^2))*A.der)
+acot(A::Dual)=Dual(acot(A.fun),(-1/(1+(A.fun)^2))*A.der)
+asec(A::Dual)=Dual(asec(A.fun),(1/((A.fun)*sqrt(((A.fun)^2)-1)))*A.der)
+acsc(A::Dual)=Dual(acsc(A.fun),(-1/((A.fun)*sqrt(((A.fun)^2)-1)))*A.der)
+exp(A::Dual)=Dual(exp(A.fun),(exp(A.fun))*A.der)
+log(A::Dual)=Dual(log(A.fun),(1/(A.fun))*A.der)
+sqrt(A::Dual)=Dual(sqrt(A.fun),(A.der/(2*sqrt(A.fun))))
+# basado en la sintaxis empleada en la tarea4 del alumno Héctor Alonso a.k.a. H-Cote
 end
