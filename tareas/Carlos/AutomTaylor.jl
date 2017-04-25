@@ -13,7 +13,13 @@ end
 function Taylor(orden,coff)
     return Taylor(promote(orden,coff)...)#al igual que la tarea3, se bhace la especificación de cómo estará compuesto la función taylor
 end    
-
+function taylor(n,v)    #ESTE AGREGADO ES NECESARIO PARA GARANTIZAR QUE TODOS LOS ELEMENTOS INGRESADOS EN EL VECTOR SEAN DEL MISMO ORDEN QUE LA N PROPUESTA
+    if length(v)==n
+        return Taylor(n,v)
+    else
+        println("función no válida")
+    end
+end
 #definición de xTaylor
 
 function xTaylor(n)
