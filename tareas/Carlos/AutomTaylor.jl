@@ -55,10 +55,8 @@ function restavector(a,b)
 end
 
 #incluyendo las operaciones de Taylor
-
-+(A::Taylor,B::Taylor)=Taylor(A.orden,A.coff+B.coff)
--(A::Taylor,B::Taylor)=Taylor(A.orden,A.coff-B.coff)
-
++(A::Taylor,B::Taylor)=Taylor(igualavector(A,B),sumavector(A,B))
+-(A::Taylor,B::Taylor)=Taylor(igualavector(A,B),restavector(A,B))
 *(A::Real,B::Taylor)=Taylor(B.orden,A*B.coff)
 *(A::Taylor,B::Real)=Taylor(A.orden,B*A.coff)
 
