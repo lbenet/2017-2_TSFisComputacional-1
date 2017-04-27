@@ -1,5 +1,5 @@
 __precompile__(true)
-module AD
+module BD
     import Base: +, -, *, /, ^, ==  #importo las operaciones principales
     export Taylor,xTaylor
     
@@ -10,14 +10,11 @@ type Taylor{T<:Number}
     coff::Array{T,1}   #coeficientes en la serie de taylor.
 end
 
-function Taylor(orden,coff)
-    return Taylor(promote(orden,coff)...)#al igual que la tarea3, se bhace la especificación de cómo estará compuesto la función taylor
-end    
 function taylor(n,v)    #ESTE AGREGADO ES NECESARIO PARA GARANTIZAR QUE TODOS LOS ELEMENTOS INGRESADOS EN EL VECTOR SEAN DEL MISMO ORDEN QUE LA N PROPUESTA
     if length(v)==n
-        return Taylor(n,v)
+        return Taylor(n-1,v)   #el primer elemento del vector es de orden 0, por eso la sustraccción
     else
-        println("función no válida")
+        error("función no válida")
     end
 end
 #definición de xTaylor
@@ -27,6 +24,34 @@ function xTaylor(n)
     w=deleteat!(w,n)#el último elemento no es cero
     w=append!(w,1.0) #el último elemento del vector de orden cero es 1.0
     return Taylor(n,w)
+end
+#esta parte es para verisi los elementos son del mismo orden para hacer la suma y resta, de no ser así, obtener el orden deseado para hacer la suma
+function igualavector(a,b)
+    if length(a.coff) < length(b.coff)
+        for i in length(a.coff):length(b.coff)-1
+            push!(a.coff,0)
+        end
+        return a.coff
+    elseif length(a.coff) >length(b.coff)
+        for i in length(b.coff):length(a.coff)-1
+            push!(b.coff,0)
+        end 
+        return b.coff
+    end
+end
+
+#suma de vecotres
+function sumavector(a,b)
+    igualavector(a,b)
+    v=a.coff+b.coff
+    return taylor(a.orden,v)
+end
+
+#resta de vectores
+function restavector(a,b)
+    igualavector(a,b)
+    v=a.coff-b.coff
+    return taylor(a.orden,v)
 end
 
 #incluyendo las operaciones de Taylor
