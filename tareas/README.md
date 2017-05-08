@@ -19,6 +19,6 @@
 |        Tarea 3     | Martes 27 de marzo  (11 AM)  |  Martes 4 de abril  (10 AM) | Cerrada |
 |        Tarea 4     | Viernes 7 de abril   |  Martes 18 de abril (10 AM) | Cerrada |
 |        Tarea 5     | Viernes 21 de abril   |  Martes ~~25 de abril~~ 2 de mayo (10 AM) | Cerrada |
-|        Tarea 5     | Viernes 5 de mayo   |  Martes 16 de mayo (10 AM) | Se aceptan PR / Revisión |
+|        Tarea 6     | Viernes 5 de mayo   |  Martes 16 de mayo (10 AM) | Se aceptan PR / Revisión |
 
 Nota: Excepto que se especifique una hora, los envíos y la aceptación deben *obtenerse* antes de las 11:59PM de la fecha anunciada.
