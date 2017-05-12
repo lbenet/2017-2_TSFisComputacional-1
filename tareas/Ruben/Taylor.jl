@@ -132,4 +132,25 @@ module ADT
   ## sin considerar la diferencia en el grado, asi Taylor([1,1]) == Taylor([1,1,0])
   ==(a::Taylor, b::Taylor) = prom(a, b).coef == prom(b, a).coef
 
+
+  ## Funciones
+
+  import Base: exp, log
+
+  function exp(a::Taylor)
+      n = gradomax(a)
+
+      expo = Taylor(exp(a.coef[1]))
+      expo = prom(expo, n)
+
+      for k = 2:n
+          suma = 0
+          for j = 1:k
+              suma += (k - j) * a.coef[k - j + 1] * expo.coef[j]
+          end
+          expo.coef[k] = suma * (1 / (k - 1))
+      end
+
+      return expo
+  end
 end
