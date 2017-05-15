@@ -117,4 +117,93 @@ end
 /(A::Taylor,B::Real)=Taylor(A.orden,(A.coff)/B)
 #fin de la división
 
+import Base:exp,log,^,sin,cos   #importando mas funciones
+#anexo para funciones del problema 2
+
+#exponencial
+function exp(f::Taylor) #se implementa la función de la exponencial
+    v=zeros(Number,f.orden+1)
+    v[1]=exp(f.coff[1])
+    for i in 2:length(v)
+        for j in 1:i-1
+            v[i]+=(i-j)*(f.coff[i-j+1])*(v[j])
+        end
+        v[i]=(v[i])/(i-1)
+    end
+    return Taylor(length(v)-1,v)
+end
+#fin de la exponencial
+
+#logaritmo
+function log(f::Taylor)  #se implementa la función de logaritmo
+    L=zeros(length(f.coff))
+    m=0
+    L[1]=log(f.coff[1])
+    L[2]=(f.coff[2])/(f.coff[1])
+    for i in 2:length(f.coff)-1
+        for j in 1:i-1
+            m+=j*L[j+1]*(f.coff[i+1-j])
+        end
+        L[i+1]=(1/f.coff[1])*(f.coff[i+1]-m/i)
+    end
+    return Taylor(length(L)-1,L)
+end
+#fin del logaritmo
+
+#potencias
+function ^(f::Taylor,a::Int)   #funcion que implementa la exponencial
+    P=zeros(length(f.coff))
+    m=0
+    if a==0
+        Taylor(length(f.coff),zeros(length(f.coff)))
+    else
+        P[1]=(f.coff[1])^(a)
+        P[2]=a*((f.coff[2])/(f.coff[1]))*P[1]
+        for i in 1:length(f.coff)-1
+            for j in 1:i-1
+                m+=((a*i)-(a+1)*(j))*(f.coff[i+1-j])*(P[j+1])
+            end
+            P[i+1]=(a)*(f.coff[i+1]/f.coff[1])*P[1]+(1/(i*f.coff[1]))*m
+        end
+        return Taylor(length(P)-1,P)
+    end
+end
+#fin de potencias
+
+#seno
+function sin(f::Taylor)   #creando la función de seno
+    S=zeros(length(f.coff))
+    C=zeros(length(f.coff))
+    C[1]=cos(f.coff[1])
+    S[2]=C[1]    #se hará lo mismo para coseno
+    m=0
+    for i in 2:length(f.coff)-1
+        for j in 0:i-1
+            m+=(i-j)*(f.coff[i+1-j])*(S[j+1])
+        end
+        S[i+1]=m/i
+    end
+    return Taylor(length(S)-1,S)
+end
+#fin de seno
+
+#coseno
+function cos(f::Taylor)   #creando la funcion coseno, semejante a la del seno
+    S=zeros(length(f.coff))
+    C=zeros(length(f.coff))
+    C[1]=cos(f.coff[1])
+    S[2]=C[1]
+    m=0
+    for i in 2:length(f.coff)-1
+        for j in 0:i-1
+            m+=(i-j)*f(f.coff[i+1-j])*(C[j+1])
+        end
+        C[i+1]=-(m/i)
+    end
+    return Taylor(length(C)-1,C)
+end
+#fin de coseno
+#fin del agregado
+
+
 end
