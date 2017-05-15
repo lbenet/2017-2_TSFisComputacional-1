@@ -18,17 +18,17 @@ type Taylor{T<:Number}
 end
 #se especifican los posibles casos para los que se puede usar este taylor.
 Taylor{T<:Number}(orden::Int,coff::Array{T,1})=Taylor{T}(orden,coff)    #el caso general
-Taylor{T<:Number}(a::Array{T,1})=Taylor(length(a-1),a)
+Taylor{T<:Number}(coff::Array{T,1})=Taylor{T}(length(coff-1),coff)
 Taylor{T<:Number}(orden::Int,coff::T)=Taylor{T}(orden,[coff])    #este caso particular es para escalares 
 
 #esta parte es para ver si los elementos son del mismo orden para hacer la suma y resta, de no ser así, obtener el orden deseado para hacer la suma
-function igualavector(a,b)
+function igualavector!(a,b)
     if length(a.coff) < length(b.coff)
         for i in length(a.coff):length(b.coff)-1
             push!(a.coff,0)
         end
         return a.coff
-    elseif length(a.coff) >length(b.coff)
+    elseif length(a.coff) > length(b.coff)
         for i in length(b.coff):length(a.coff)-1
             push!(b.coff,0)
         end 
@@ -38,28 +38,28 @@ end
 
 #suma de taylor
 function +(f::Taylor,g::Taylor) 
-    igualavector(f,g)  #igualdor de taylor's
+    igualavector!(f,g)  #igualdor de taylor's
     return Taylor(f.orden,f.coff+g.coff)   #operación artimética directa, la resta es análoga
 end
 
 #resta de taylor
 function -(f::Taylor,g::Taylor)
-    igualavector(f,g)  #se usa el igualador de taylor's
+    igualavector!(f,g)  #se usa el igualador de taylor's
     return Taylor(f.orden,f.coff-g.coff)  
 end
 
 #producto entre taylors
 #funcion auxiliar para hacer el producto
-function prod(f::Taylor,g::Taylor)
+function prod!(f::Taylor,g::Taylor)
     m=Taylor(f.orden+g.orden,zeros(f.orden+g.orden+1))    #taylor auxiliar para poder hacer el producto
-    f=igualavector(f,m)
-    g=igualavector(g,m)     #con esto se tienen vectores de mismo orden y coeficientes
+    f=igualavector!(f,m)
+    g=igualavector!(g,m)     #con esto se tienen vectores de mismo orden y coeficientes
     return f,g
 end
 #fin de l funcion axiliar
 #funcion principal de taylor
 function *(f::Taylor,g::Taylor)     #con la funcion prod ya formulada, se puede hacer producto ya que son del mismo orden
-    prod(f,g)                    #se usa el promotor de coeficientes
+    prod!(f,g)                    #se usa el promotor de coeficientes
     z=Taylor(f.orden,zeros(f.orden+1)) 
     for i in 1:length(f.coff)       #se usa doble ciclo for para poder hacer el producto por cada coeficiente y depositarl en el resultado
         for j in 1:i
@@ -82,7 +82,7 @@ function /(f::Taylor,g::Taylor)
         error("división no válida ya que el resultado no es un polinomio de grado mayor a cero")
     end
     #fin del if
-    igualavector(f,g)   #se igualan los coeficientes para poder operar en la división
+    igualavector!(f,g)   #se igualan los coeficientes para poder operar en la división
     cociente=zeros(f.orden+1)
     h=1    #contador que indica donde se empieza a ser el resultado distinto de cero
     for i in 1:length(g.coff)
