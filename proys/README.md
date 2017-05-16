@@ -4,7 +4,7 @@
 
 ## Fechas importantes
 
-- Elección del tema: **viernes 16 de mayo**
+- Elección del tema: **viernes 19 de mayo**
 
 - Envío de proyectos/presentaciones: **viernes 2 de junio**
 
