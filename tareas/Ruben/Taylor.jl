@@ -162,24 +162,21 @@ module ADT
 
     # Logaritmo
 
+    import Base: log
+
     function log(a::Taylor)
         n = gradomax(a); # grado máximo
 
         Loga = Taylor(zeros(n));
         Loga.coef[1] = log(a.coef[1]);
 
-        s = 1; # índice desde donde empezamos
-        while a.coef[s] == 0
-            s += 1
-        end
-
-        for k = (s+1):n
+        for k = 2:n
             suma = 0;
 
-            for j = (s+1): k
-                suma += (j-1)*Loga.coef[j]*a.coef[k-j+1];
+            for j = 2: k
+                suma += (j - 1) * Loga.coef[j] * a.coef[k - j + 1];
             end
-            Loga.coef[k] = (1/a.coef[s])*(a.coef[k]-suma/(k-s))
+            Loga.coef[k] = (1 / a.coef[1]) * (a.coef[k] - suma / (k - 1))
         end
 
         return Loga
