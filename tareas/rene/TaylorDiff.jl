@@ -113,17 +113,9 @@ Función que regresa el producto de dos estructuras tipo Taylor.
 """
 function taylorprod(a,b)#función que devuelve el producto de los coeficientes tipo Taylor
     (x,y)=(Taylor(a.v),Taylor(b.v))
-    if x.n==y.n
-        o=taylor(x.v,length(x.v)+5)
-        f=taylor(y.v,length(x.v)+5)
-        return Taylor(producto(o.v,f.v))
-    elseif x.n<y.n
-        z=taylor(x.v,y.n)
-        return Taylor(producto(z.v,y.v))
-    else
-        z=taylor(y.v,x.n)
-        return Taylor(producto(z.v,x.v))
-    end
+    o=taylor(x.v,x.n+y.n)
+    f=taylor(y.v,x.n+y.n)
+    return Taylor(producto(o.v,f.v))
 end
 """
 division(a,b)
@@ -162,15 +154,9 @@ Función que regresa el división de dos estructuras tipo Taylor.
 """
 function taylordiv(a,b)#función que devuelve la división de los coeficientes tipo Taylor
     (x,y)=(Taylor(a.v),Taylor(b.v))
-    if x.n==y.n
-        return Taylor(division(x.v,y.v))
-    elseif x.n<y.n
-        z=taylor(x.v,y.n)
-        return Taylor(division(z.v,y.v))
-    else
-        z=taylor(y.v,x.n)
-        return Taylor(division(x.v,z.v))
-    end
+    o=taylor(x.v,x.n+y.n)
+    f=taylor(y.v,x.n+y.n)
+    return Taylor(division(o.v,f.v))
 end
 """
 taylorigual(a,b)
@@ -224,6 +210,7 @@ Cexpalpha(g,alpha)
 Función que regresa los coeficientes Taylor para (g)^α, donde g es un polinomio. 
 """
 function Cexpalpha(g,alpha)#algoritmo que cálcula los coeficientes de Taylor para la función (g(x))^α
+    if(g.v[1]!=0)
     P=zeros(eltype(g.v), length(g.v))
     P[1]=(g.v[1])^alpha
     P[2]=alpha*(g.v[2]/g.v[1])*P[1]
@@ -235,6 +222,9 @@ function Cexpalpha(g,alpha)#algoritmo que cálcula los coeficientes de Taylor pa
     P[k+1]=alpha*(g.v[k+1]/g.v[1])*P[1]+(1/(k*g.v[1]))*p
     end
     return Taylor(P)
+    else 
+    return error("el orden cero de g debe ser distinto de cero")
+    end
 end
 """
 Csencos(g)
@@ -304,3 +294,33 @@ sin(a::Taylor)=Csen(a)
 cos(a::Taylor)=Ccos(a)
 
 end
+
+#=
+Funciones opcionales
+function taylorprod(a,b)#función que devuelve el producto de los coeficientes tipo Taylor
+    (x,y)=(Taylor(a.v),Taylor(b.v))
+    if x.n==y.n
+        o=taylor(x.v,length(x.v)+length(y.v))
+        f=taylor(y.v,length(x.v)+length(y.v))
+        return Taylor(producto(o.v,f.v))
+    elseif x.n<y.n
+        z=taylor(x.v,y.n)
+        return Taylor(producto(z.v,y.v))
+    else
+        z=taylor(y.v,x.n)
+        return Taylor(producto(z.v,x.v))
+    end
+end
+function taylordiv(a,b)#función que devuelve la división de los coeficientes tipo Taylor
+    (x,y)=(Taylor(a.v),Taylor(b.v))
+    if x.n==y.n
+        return Taylor(division(x.v,y.v))
+    elseif x.n<y.n
+        z=taylor(x.v,y.n)
+        return Taylor(division(z.v,y.v))
+    else
+        z=taylor(y.v,x.n)
+        return Taylor(division(x.v,z.v))
+    end
+end
+=#
