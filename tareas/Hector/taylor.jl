@@ -2,7 +2,7 @@
 __precompile__(true)
 
 module Ty
-    import Base: +, -, *, /, ==
+    import Base: +, -, *, /, ==,^
 
 
     export Taylor
@@ -207,15 +207,14 @@ function tmulti(a,b)
 end   
 
 #*****************************************************************************************
-
 function tdiv(a,b)
   #=---------------------División de los vectores-------------------------=#  
        
         grado_principal=a.grado-b.grado #obtenemos el grado  principal
     
 if grado_principal<0
-        error("división no válida ya que el resultado no es un polinomio de grado mayor a cero")
-    end
+        return println("grado negativo")
+end
 
 
         #Copiamos los vectores para no modificar los originales
@@ -247,75 +246,26 @@ if grado_principal<0
             
     end
  #************************************************************************************* 
-divi = zeros(lenf+1)  
+divi = zeros(lenf)  
 
-    h=1 
-    for i in 1:length(g)
-        if g[i]!=0
-            divi[1]=(f[i])/(g[i])     #es es para hacer la división y evitar dividir coeficientes cero
-            h=i
-            break
-            elseif (i==length(g)) & (g[i]==0)    #en caso de encontrar un coeficiente del denominador con cero, manda un error
-            error("polinomio divisor posee un cero")
+    for k=1:length(divi) #(era -1)
+        suma=0 #Valor inicial de la suma
+        for i=1:k-1
+            suma+=(divi[i])*g[k+1-i]
         end
+        divi[k]=(1/g[1])*(f[k]-suma)
     end
-    #fin del for
-    for i in 1:h-1   #usando el contador del ciclo pasado
-        if f[i]!=0
-            error("no tiene una expansión de Taylor")  #esto es para asegurar que no sea de la forma a^n/b^m donde m>n
-        end
+    for i=1:grado_principal+2:length(lenf)
+        if divi[i]==0
+            deleteat!(cociente,i)
     end
-    #lo que falta ahora, es hacer el resto de la división si el polinomio cumple con lo estipulado previamente
-    #como en el producto, en el cociente se hace doble ciclo for
-
-
-#=
-for i=1:leng
-    if g[i]!=0 #Excluimos casos donde el valor es indeterminado
-        divi[1]=f[1]/g[1]
-            for k=1:lenf
-                suma=0 #Valor inicial de la suma
-                for i=1:k
-                    suma += (f[i]/g[i])*g[k+1-i]   
-                end
-                    
-                divi[k] = (1/g[1])*(f[k]-suma)
-                       
-            end 
-        
-            
-   else #Caso donde hay al menos un valor indeterminado
-            
-       return println("No se puede realiazar la división. El segundo vector tiene alguna entrada igual a cero")        
-            
-   end   #end del if 
-        
-end  #end del for principal          
-        
-    return Taylor(divi,grado_principal)
- 
-   
-end=#
-
-
-
-    for i in h+1:length(divi)-h
-        suma=0 #suma de los resultados que se lleven a cabo en la division
-        for j in 1:i-h
-            suma=suma+(divi[j])*g[i-j+1]
-        end
-        divi[1+i-h]=(1/g[h])*(f[i]-suma)
-    end
-    if divi[grado_principal+2]==0
-        deleteat!(divi,grado_principal+2)
-    end
+        end    
     return Taylor(divi,grado_principal)
 end
-
 #****************************************************************************************
 
 function tcomp(a,b)
-    if a==b
+    if a.cofun==b.cofun
         return true
     else
         return false
@@ -323,12 +273,11 @@ function tcomp(a,b)
 end    
 
 #*****************************************************************************************
-
 function elevar(pol,expo)
     grado_principal = expo*pol.grado #El grado principal es el producto del grado y el exponente.
     poly=copy(pol.cofun) #Hacemos una copia del vector del polinomio
     
-    lp=length(grado_principal)
+    lp=length(grado_principal+1)
    # ceros=zeros(lp+(grado_principal-4))       
     ceros=zeros(lp) #Creamos un arreglo de ceros cuya longitud es determinada por el grado_principal 
     for i=1:length(ceros)
@@ -342,7 +291,7 @@ function elevar(pol,expo)
     
     for k=1:length(poly)-1
         suma=0 #Valor inicial de la suma
-        for i=1:k-1
+        for i in 1:k-1
             suma+=(expo*k-(expo+1)*i)*poly[k+1-i]*p[i+1]
         end
         
@@ -351,7 +300,6 @@ function elevar(pol,expo)
     
     return Taylor(p,grado_principal)
 end
-
 #*****************************************************************************************
 
 +(f::Taylor, g::Taylor) = tsuma(f,g)
@@ -359,6 +307,7 @@ end
 *(f::Taylor, g::Taylor) = tmulti(f,g)
 /(f::Taylor, g::Taylor) = tdiv(f,g)
 ==(f::Taylor, g::Taylor) = tcomp(f,g)
+^(f::Taylor, exp::Int) = elevar(f,exp)
 
 
 end
