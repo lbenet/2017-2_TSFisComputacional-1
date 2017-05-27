@@ -46,10 +46,12 @@ excepto quizás una).
 
 Es requisito *indispensable* para entrar al examen final
 (presentación del proyecto final) tener entregadas *y aceptadas*
-todas las tareas excepto quizás una (es decir, ~75% de las tareas).
+todas las tareas excepto quizás una (es decir, aproximadamente
+75% de las tareas).
 Las tareas se enviarán como
 [pull request](https://help.github.com/articles/using-pull-requests/)
-a través de GitHub, cumpliendo las fechas de *aceptación* (~ 2 semanas).
+a través de GitHub, cumpliendo las fechas de *aceptación* (
+aproximadamente 2 semanas).
 
 El proyecto final consiste en desarrollar un tema en donde utilizen
 las herramientas del curso a un sistema dinámico concreto. Los temas
