@@ -6,7 +6,6 @@ github: ravioaraiza
 25/04/17
 =#
 
-
 __precompile__(true)
 
 module ADT
@@ -216,7 +215,7 @@ module ADT
     cos(a::Taylor, n::Integer) = cos(prom(a, n))
 
     ## integrador
-    
+
     function adaptive_step(a::Taylor, epsi::Real = 1e-40)
       p = gradomax(a)
 
@@ -265,7 +264,7 @@ module ADT
 
       while t0 <= tf && n <= max
         sol = coeficient2(t0, X̄[end], f)
-        
+
         hx = adaptive_step(sol[1], epsi)
         hy = adaptive_step(sol[2], epsi)
         h = min(hx, hy)
