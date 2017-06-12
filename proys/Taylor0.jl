@@ -37,19 +37,19 @@ function taylor{T<:Number}(v::Array{T},n::Int)
         for j in 1:i
             x[j]=v[j]
         end
-        return Taylor(x,i-1)
+        return Taylor(x,length(x)-1)
     elseif i>n
         x=zeros(eltype(v),n+1)
         for j in 1:n+1
             x[j]=v[j]
         end
-        return Taylor(x,i-1)
+        return Taylor(x,length(x)-1)
     else
         x=zeros(eltype(v),n+1)
         for j in 1:i
             x[j]=v[j]
         end
-        return Taylor(x,n-1)
+        return Taylor(x,length(x)-1)
     end
 end
 function taylor{T<:Number}(v::T,N::Int)#función Taylor aplicada sobre un número
@@ -86,18 +86,6 @@ function simplificaT(x)
     end
     return taylor(a,length(a)-1)
 end
-#=
-function simplificaT(x)
-    n=length(x.v)#número de elementos del vector x.v
-    while(x.v[n]==0&& n>1)
-        n=n-1
-    end
-    a=zeros(eltype(x.v),n)
-    for i in 1:n
-        a[i]=x.v[i]
-    end
-    return taylor(a,length(x.v)-1)
-end=#
 """
 igualvec(a,b)
 
@@ -122,7 +110,7 @@ Función que regresa la suma de dos tipos Taylor.
 """
 function taylorsum(a,b)#función que suma los coeficientes tipo Taylor
     (x,y)=igualvec(a.v,b.v)
-    return taylor(x+y,length(x))#suma los vectores y regresa un Taylor
+    return taylor(x+y,length(x)-1)#suma los vectores y regresa un Taylor
 end
 """
 taylorres(a,b)
@@ -131,7 +119,7 @@ Función que regresa la diferencia de dos tipos Taylor.
 """
 function taylorres(a,b)#función que suma los coeficientes tipo Taylor
     (x,y)=igualvec(a.v,b.v)
-    return taylor(x-y,length(x))#suma los vectores y regresa un Taylor
+    return taylor(x-y,length(x)-1)#suma los vectores y regresa un Taylor
 end
 """
 producto(a,b)
@@ -139,10 +127,11 @@ producto(a,b)
 Función que regresa el producto de dos vectores de la misma longitud.
 """
 function producto(a,b)#producto de los coeficientes tipo Taylor para dos vectores de igual número de elementos
-    ab=zeros(eltype(a), length(a))#vector con los mismos elementos de a
-    for k in 1:length(a)
+    x,y=igualvec(a,b)
+    ab=zeros(eltype(x), length(x))#vector con los mismos elementos de a
+    for k in 1:length(x)
         for i in 1:k
-            ab[k]+=a[i]*b[k+1-i]
+            ab[k]+=x[i]*y[k+1-i]
         end
     end
     return ab
@@ -153,16 +142,17 @@ taylorprod(a,b)
 Función que regresa el producto de dos tipos Taylor.
 """
 function taylorprod(a,b)#función que devuelve el producto de los coeficientes tipo Taylor
-    o=taylor(a.v,a.n+b.n)
-    f=taylor(b.v,a.n+b.n)
-    return taylor(producto(o.v,f.v),o.n+f.n)
+    x,y=igualvec(a.v,b.v)
+    o=producto(x,y)
+    return taylor(o,length(x)-1)
 end
 """
 division(x,y)
 
 Función que regresa el cociente de dos vectores de la misma longitud.
 """
-function division(x,y)#división de los coeficientes tipo Taylor para dos vectores de igual número de elementos 
+function division(a,b)#división de los coeficientes tipo Taylor para dos vectores de igual número de elementos 
+    x,y=igualvec(a,b)
     h=1
     for m in 1:length(x)
         if(y[m]==0 && x[m]==0)
@@ -194,9 +184,8 @@ taylordiv(a,b)
 Función que regresa el cociente de dos tipos Taylor.
 """
 function taylordiv(a,b)#función que devuelve la división de los coeficientes tipo Taylor
-    o=taylor(a.v,a.n+b.n)
-    f=taylor(b.v,a.n+b.n)
-    return taylor(division(o.v,f.v),a.n+b.n)
+    x,y=igualvec(a.v,b.v)
+    return taylor(division(x,y),length(x)-1)
 end
 """
 taylorigual(a,b)
@@ -210,47 +199,41 @@ function taylorigual(a,b)
     else
         return false
     end
-end
+end 
 #Funciones que realizan operaciones entre estructuras tipo Taylor
 import Base: +, -, *, /, ==,exp,^,log,sin,cos
 for (f,f1,f2,f3) = ((:+,Taylor,Taylor,(:(taylorsum(a,b)))),
-                    (:+,Taylor,Number,(:(taylor(a.v,length(a.v)-1)+taylor(b)))),
-                    (:+,Number,Taylor,(:(taylor(a)+taylor(b.v,length(b.v))))),
+                    (:+,Taylor,Number,(:(a+taylor(b,length(a.v)-1)))),
+                    (:+,Number,Taylor,(:(taylor(a,length(b.v)-1)+b))),                  
                     (:-,Taylor,Taylor,(:(taylorres(a,b)))),
-                    (:-,Taylor,Number,(:(taylor(a.v,a.n)-taylor(b)))),
-                    (:-,Number,Taylor,(:(taylor(a)-taylor(b.v,b.n)))),
+                    (:-,Taylor,Number,(:(a-taylor(b,length(a.v)-1)))),
+                    (:-,Number,Taylor,(:(taylor(a,length(b.v)-1)-b))),
                     (:*,Taylor,Taylor,(:(taylorprod(a,b)))),
-                    (:*,Taylor,Number,(:(taylor(a.v,a.n)*taylor(b)))),
-                    (:*,Number,Taylor,(:(taylor(a,length(b.v)-1)*taylor(b.v,b.n)))),
+                    (:*,Taylor,Number,(:(a*taylor(b,length(a.v)-1)))),
+                    (:*,Number,Taylor,(:(taylor(a,length(b.v)-1)*b))),
                     (:/,Taylor,Taylor,(:(taylordiv(a,b)))),
-                    (:/,Taylor,Number,(:(taylor(a.v,a.n)/taylor(b)))),
-                    (:/,Number,Taylor,(:(taylor(a)/taylor(b.v,b.n)))),
+                    (:/,Taylor,Number,(:(a/taylor(b,length(a.v)-1)))),
+                    (:/,Number,Taylor,(:(taylor(a,length(b.v)-1)/b))),
                     (:(==),Taylor,Taylor,(:(taylorigual(a,b)))),
-                    (:(==),Taylor,Number,(:(a==taylor(b)))),
-                    (:(==),Number,Taylor,(:(taylor(a)==b))) )
+                    (:(==),Taylor,Number,(:(a==taylor(b,length(a.v)-1)))),
+                    (:(==),Number,Taylor,(:(taylor(a,length(b.v)-1)==b))) ) 
               
     ex = quote
         $f(a::$f1,b::$f2)=$f3
     end
     @eval $ex
-end
+end                     
 -(a::Taylor)=-1*a
 """
 exp(g)
 Función que regresa los coeficientes Taylor para la exp(g), donde g es un polinomio. 
 """
 function exp(g::Taylor)#algoritmo que cálcula los coeficientes de Taylor para la función exp(g(x))
-    E=zeros(eltype(g.v), length(g.v))
-    E[1]=exp(g.v[1])
-    E[2]=g.v[2]*E[1]
-    for k in 2:length(g.v)-1
-        p=zero(eltype(g.v))
-        for j in 0:k-1
-            p+=(k-j)*g.v[k+1-j]*E[j+1]
-        end
-    E[k+1]=p/k
+    a=taylor(zeros(eltype(g.v),length(g.v)),length(g.v)-1)
+    for i in 1:length(g.v)-1
+        a+=(1.0)(g)^(i)/factorial(big(i))
     end
-    return taylor(E,length(g.v)-1)
+    return a
 end
 """
 log(g)
@@ -281,40 +264,26 @@ function ^(g::Taylor,alpha::Int64)#algoritmo que cálcula los coeficientes de Ta
     return a
 end
 """
-Csencos(g)
-Función que regresa a la vez,los coeficientes Taylor para sin(g) y cos(g), donde g es un polinomio. 
-"""
-function Csencos(g)#algoritmo que cálcula los coeficientes de Taylor para las funciones cos(g(x)) y sin(g(x))
-    S=zeros(eltype(g.v), length(g.v))
-    C=zeros(eltype(g.v), length(g.v))
-    C[1]=cos(g.v[1])
-    S[2]=C[1]
-    for k in 2:length(g.v)-1
-        p=zero(eltype(g.v))
-        q=zero(eltype(g.v))
-        for j in 0:k-1
-            p+=(k-j)*g.v[k+1-j]*C[j+1]
-            q+=(k-j)*g.v[k+1-j]*S[j+1]
-        end
-    S[k+1]=p/k
-    C[k+1]=-q/k
-    end
-    return taylor(C,length(C)-1),taylor(S,length(S)-1)
-end
-"""
 sen(g)
 Función que regresa los coeficientes Taylor para sin(g), donde g es un polinomio. 
 """
 function sin(g::Taylor)
-    (a,b)=Csencos(g)
-    return b
+    a=taylor(zeros(eltype(g.v),length(g.v)),length(g.v)-1)
+    for i in 1:2:length(g.v)-1
+        a+=(-1.0)^((i-1)/2)*(g)^(i)/factorial(big(i))
+    end
+    return a
 end
 """
 cos(g)
 Función que regresa los coeficientes Taylor para cos(g), donde g es un polinomio. 
 """
 function cos(g::Taylor)
-    (a,b)=Csencos(g)
+    a=taylor(zeros(eltype(g.v),length(g.v)),length(g.v)-1)
+    a=taylor(one(eltype(g.v)),length(g.v)-1)
+    for i in 2:2:length(g.v)-1
+        a+=(-1.0)^(i/2)*(g)^(i)/factorial(big(i))
+    end
     return a
 end
 
@@ -421,42 +390,3 @@ function kasRK42(f,g,t,x,y,h)#función de apoyo para el método de Runge Kutta
 end
 
 end
-
-
-
-#=
-""" estructura type con funciones dentro"""
-type Taylor{T<:Number}#<:Number
-    v::Array{T}
-    n::Int
-    function Taylor(v::Array{T},n::Int)
-        i=length(v)#número de elementos del vector v
-        while(v[i]==0&& i>1)
-            i=i-1
-        end
-        if i<n
-            x=zeros(eltype(v),n+1)
-            for j in 1:i
-                x[j]=v[j]
-            end
-            return new(x,i-1)
-        elseif i>n
-            x=zeros(eltype(v),n+1)
-            for j in 1:n+1
-                x[j]=v[j]
-            end
-            return new(x,i-1)
-        else
-            x=zeros(eltype(v),n+1)
-            for j in 1:i
-                x[j]=v[j]
-            end
-            return new(x,n)
-        end
-    end
-    function Taylor(v::T)#función Taylor aplicada sobre un número
-        x=zeros(eltype(v),1)
-        x[1]=v
-        return new(x,0)#devuelve una estructura Taylor de orden 0
-    end
-end=#
