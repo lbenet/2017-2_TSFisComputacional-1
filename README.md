@@ -89,3 +89,4 @@ de cada uno de los integrantes del equipo será medida usando GitHub.
 	- [Hands_on_julia](https://github.com/dpsanders/hands_on_julia)
 
 	- [JuliaBox](juliabox.org)
+# OsciladorParametrico
