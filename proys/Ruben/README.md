@@ -9,12 +9,9 @@
 
 ### Archivos
 
-- **OsciladorParametrico.ipynb (Pendiente)**
+- **Proyecto Final.ipynb (Pendiente)**
 
 	Archivo utilizado para la presentación. incluye gráficas y explicación de los procedimientos.
-- **main.jl**
-
-	Programa de Julia utilizado para los cálculos y crear las figuras utilizadas en OsciladorParametrico.
 
 - **funciones.jl**
 
